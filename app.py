@@ -4,8 +4,6 @@ import re
 from datetime import date
 import smtplib
 import email.message
-export MYSQLCLIENT_CFLAGS="-I/path/to/mysqlclient/headers"
-export MYSQLCLIENT_LDFLAGS="-L/path/to/mysqlclient/libs"
 
 conexao = mysql.connector.connect(
     host='200k.mysql.uhserver.com',
