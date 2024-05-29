@@ -18,6 +18,7 @@ regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 v_nome = ""
 v_ncelular = ""
 v_quemapoia = ""
+v_formadeapoio = ""
 v_email = ""
 
 # Store the initial value of widgets in session state
@@ -157,7 +158,8 @@ def inscricao():
         st.divider()
 
         input_quemapoia = st.text_input(label="Qual atleta ou equipe você vai apoiar?",key="22")
-        
+
+        input_formadeapoio = st.radio("Forma de apoio:", ["Carro", "Motocicleta", "Bicicleta"])
         st.divider()
 
         st.write("Termo de Responsabilidade")
@@ -222,6 +224,15 @@ def inscricao():
                 st.warning("Informe o atleta ou equipe a qual está apoiando!", icon="⚠️")
                 st.stop()
 
+            if input_formadeapoio == "Carro":
+                v_formadeapoio = "Carro"
+            elif input_formadeapoio == "Motocicleta":
+                v_formadeapoio = "Motocicleta"
+            elif input_formadeapoio == "Bicicleta":
+                v_formadeapoio = "Bicicleta"
+            else: 
+                v_formadeapoio = ""
+                
             ncelular = input_telefone
             crtr1 = "!@#$()*'%:;?<>_\|/ .-,"
             for i in range(0,len(crtr1)):
@@ -270,10 +281,10 @@ def inscricao():
 
                 qry_insert = f"""INSERT INTO 200k.APOIO (
                                  ID_APOIO, EMAIL, NOME, ENDERECO, NR_ENDERECO, COMP_ENDERECO, CIDADE, ESTADO_UF, DT_NASCIMENTO, 
-                                 NR_CELULAR, SEXO, CAMISETA, QUEM_APOIA, ATIVO, DT_INSCRICAO, FL_TERMO)
+                                 NR_CELULAR, SEXO, CAMISETA, QUEM_APOIA, FORMA_APOIO, ATIVO, DT_INSCRICAO, FL_TERMO)
                                  VALUES (
                                         {idapoio},"{input_email}","{input_nome + ' ' + input_sobrenome}","{input_rua}","{input_numero}","{input_comp}","{input_cidade}",
-                                        "{input_estado}","{datanasc}","{ncelular}","{sexo}","{input_camiseta}","{v_quemapoia}",'Sim',"{dataf}",'S') """
+                                        "{input_estado}","{datanasc}","{ncelular}","{sexo}","{input_camiseta}","{v_quemapoia}","{v_formadeapoio}",'Sim',"{dataf}",'S') """
 
                 cursor = conexao.cursor()
                 cursor.execute(qry_insert)
