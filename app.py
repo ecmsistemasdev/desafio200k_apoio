@@ -17,7 +17,7 @@ regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 v_nome = ""
 v_ncelular = ""
-v_quemapoio = ""
+v_quemapoia = ""
 v_email = ""
 
 # Store the initial value of widgets in session state
@@ -306,6 +306,3 @@ if tela_ativa == 2:
 from PIL import Image
 img = Image.open('003.png')
 st.image(img)
-
-
-
