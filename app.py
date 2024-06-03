@@ -200,9 +200,9 @@ def inscricao():
                 st.warning("Informe o E-mail!", icon="⚠️")
                 st.stop()
 
-            if not(re.search(regex,input_email)):  
-                st.warning("E-mail incorreto", icon="⚠️")   
-                st.stop()
+            #if not(re.search(regex,input_email)):  
+            #    st.warning("E-mail incorreto", icon="⚠️")   
+            #    st.stop()
 
             if input_nome == '':
                 st.warning("Informe o primeiro Nome!", icon="⚠️")
