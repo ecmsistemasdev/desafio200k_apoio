@@ -87,8 +87,6 @@ def inscricao():
     global v_nome, v_ncelular
 
     with ((form_inscricao.form("Inscricao"))):
-        st.markdown("### Formulário de Inscrição do Apoio")
-
         #input_email = st.text_input(label="E-mail:", key="01")
         input_nome = st.text_input(label="Nome:", placeholder="Informe seu nome", key="01")
         input_telefone = st.text_input(label="Nº Celular 99 99999-9999:", max_chars=15, key="02")
