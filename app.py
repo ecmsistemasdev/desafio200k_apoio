@@ -1,9 +1,16 @@
 import streamlit as st
 import mysql.connector
 import re
-from datetime import date
+from datetime import datetime
 import smtplib
 import email.message
+import urllib
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+
+navegador = webdriver.Chrome()
+navegador.get("https://web.whatsapp.com/")
 
 conexao = mysql.connector.connect(
     host='200k.mysql.uhserver.com',
@@ -17,38 +24,24 @@ regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 v_nome = ""
 v_ncelular = ""
-v_quemapoia = ""
-v_email = ""
+#v_modalidade = ""
+#v_email = ""
 
 # Store the initial value of widgets in session state
 if "visibility" not in st.session_state:
     st.session_state.visibility = "visible"
     st.session_state.disabled = False
 
-def calculateAge(birthDate): 
-    #dia = int(nascimento[0:2])
-    #mes = int(nascimento[3:5])
-    #ano = int(nascimento[6:10])
-
-    #birthDate = date(ano, mes, dia)
-
-    today = date.today() 
-    age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day)) 
-  
-    return age 
-
-
-def enviar_email(snome,sfone,squemapoio,semail): 
+def enviar_email(snome,sfone,semail): 
     try: 
         corpo_email = f"""
-        <p>Inscrição  de apoio realizada para o <b>3º Desafio 200k - Porto Velho/Humaitá</b> </p>
+        <p>Feijoada do Casório</b> </p>
         <p>Nome: <b>{snome}</b> </p>
         <p>Telefone: <b>{sfone}</b> </p>
-        <p>Quem apoia: <b>{squemapoio}</b> </p>
         """
         
         msg = email.message.Message()
-        msg['Subject'] = "Inscrição de Apoio do 3º Desafio 200k - "+ snome
+        msg['Subject'] = "Feijoada do Casório - "+ snome
         msg['From'] = 'ecmsistemasdeveloper@gmail.com'
         msg['To'] = "kelioesteves@hotmail.com;"
         msg['Co'] = semail
@@ -71,155 +64,67 @@ def enviar_email(snome,sfone,squemapoio,semail):
 
 def concluido():
     global tela_ativa
-    #placeholder.empty()
-    #placeholder2 = st.empty()
-
-    #with placeholder2.form("Regulamento"):
-    st.success("INSCRIÇÃO REALIZADA COM SUCESSO")
-    #st.write(incricao().modalidade)
-    #st.write(incricao().idmodalidade)
-    #st.write(incricao().kmsolo)
-    #st.write("id_atleta ", inscricao().idatleta)
+    st.success("PEDIDO REALIZADO COM SUCESSO")
 
 
 
-st.set_page_config(page_title="3º Desafio 200k")
+
+st.set_page_config(page_title="Feijoada do Casório")
 tela_ativa = 0
 
 from PIL import Image
 img = Image.open('02.png')
 st.image(img)
 
-st.markdown("### 3º Desafio 200k - Porto Velho/Humaitá")
+st.markdown("### Feijoada do Casório")
+
 
 form_inscricao = st.empty()
 
 def inscricao():
     global tela_ativa
     global concluido
-    global v_nome, v_modalidade, v_ncelular, v_email
+    global v_nome, v_ncelular
 
     with ((form_inscricao.form("Inscricao"))):
         st.markdown("### Formulário de Inscrição do Apoio")
 
-        input_email = st.text_input(label="E-mail:", key="01")
-        input_nome = st.text_input(label="Primeiro Nome:", placeholder="Insira apenas seu primeiro nome", key="02")
-        input_sobrenome = st.text_input(label="Sobrenome:", placeholder="Insira seu sobrenome",key="03")
-        input_dn = st.date_input(label="Data de Nascimento:",format="DD/MM/YYYY", 
-                                 max_value=date(year=2006, month=7, day=5),min_value=date(year=1924, month=7, day=5), value=None, key="05")
-        input_telefone = st.text_input(label="Nº Celular 99 99999-9999:", max_chars=15, key="06")
+        #input_email = st.text_input(label="E-mail:", key="01")
+        input_nome = st.text_input(label="Nome:", placeholder="Informe seu nome", key="01")
+        input_telefone = st.text_input(label="Nº Celular 99 99999-9999:", max_chars=15, key="02")
+        input_re = st.radio("Entrega/Retirada:", ["Entrega", "Retirada"], key="03")
+
         st.caption("Endereço:")
         e1, e2 = st.columns([4,1])
         with e1:
-            input_rua = st.text_input(label="Rua:", key="07")
+            input_rua = st.text_input(label="Rua:", key="04")
         with e2:
-            input_numero = st.text_input(label="Número:", key="15")
-        input_comp = st.text_input(label="Complemento:", key="28")
-        input_bairro = st.text_input(label="Bairro:", key="08")
-        g1, g2 = st.columns([2, 1])
-        with g1:
-            input_cidade = st.text_input(label="Cidade:", value="Porto Velho", key="09")
-        with g2:
-            input_estado = st.selectbox("Estado:",("Acre (AC)",
-                                                   "Alagoas (AL)",
-                                                   "Amapá (AP)",
-                                                   "Amazonas (AM)",
-                                                   "Bahia (BA)",
-                                                   "Ceará (CE)",
-                                                   "Distrito Federal (DF)",
-                                                   "Espírito Santo (ES)",
-                                                   "Goiás (GO)",
-                                                   "Maranhão (MA)",
-                                                   "Mato Grosso (MT)",
-                                                   "Mato Grosso do Sul (MS)",
-                                                   "Minas Gerais (MG)",
-                                                   "Pará (PA)",
-                                                   "Paraíba (PB)",
-                                                   "Paraná (PR)",
-                                                   "Pernambuco (PE)",
-                                                   "Piauí (PI)",
-                                                   "Rio de Janeiro (RJ)",
-                                                   "Rio Grande do Norte (RN)",
-                                                   "Rio Grande do Sul (RS)",
-                                                   "Rondônia (RO)",
-                                                   "Roraima (RR)",
-                                                   "Santa Catarina (SC)",
-                                                   "São Paulo (SP)",
-                                                   "Sergipe (SE)",
-                                                   "Tocantins (TO)"),index=21)
+            input_numero = st.text_input(label="Número:", key="05")
+        input_comp = st.text_input(label="Complemento:", key="06")
+        input_bairro = st.text_input(label="Bairro:", key="07")
+        input_pontoref = st.text_input(label="Ponto de referência:", key="08")
+        input_obs = st.text_input(label="Observações:", key="09")
 
-        f1,f2 = st.columns([1,1])
-        with f1:
-            input_genero = st.radio("Gênero:", ["Masculino", "Feminino"])
-        with f2:
-            input_camiseta = st.radio("Camiseta:", ["PP", "P", "M", "G"])
+        #input_cidade = st.text_input(label="Cidade/UF:", value="Porto Velho/RO", key="08")
 
         st.divider()
 
-        input_quemapoia = st.text_input(label="Qual atleta ou equipe você vai apoiar?",key="22")
-        
-        st.divider()
+        cursorID = conexao.cursor()
+        id_ = f'SELECT IFNULL(MAX(ID_PEDIDO)+1,1) FROM FEIJOADA'
+        cursorID.execute(id_)
+        newid = cursorID.fetchone()
+        idpedido = newid[0]
 
-        st.write("Termo de Responsabilidade")
-
-        def termoResp():
-            with open('Termo.txt', 'r', encoding='UTF-8') as f:
-                lines = f.readlines()
-                for line in lines:
-                    st.caption(line)
-
-        termoResp()
-
-        check_resp = False
-        flresp = st.checkbox('LI E ACEITO O TERMO DE RESPONSABILIDADE',key="disabled")
-
-        if flresp:
-            check_resp = True
-        
-        st.divider()
-
-        cursor1 = conexao.cursor()
-        comando = f'SELECT ID_APOIO FROM 200k.APOIO WHERE EMAIL = "{input_email}"'
-        cursor1.execute(comando)
-        resultado_email = cursor1.fetchone()
-        #s_email = resultado_email[0]
-
-        cursor2 = conexao.cursor()
-        id_ = f'SELECT IFNULL(MAX(ID_APOIO)+1,1) FROM APOIO'
-        cursor2.execute(id_)
-        newid = cursor2.fetchone()
-        idapoio = newid[0]
-
-        confirma_button = st.form_submit_button("CONFIRMAR INSCRIÇÃO",type="primary") #, disabled=not st.session_state.disabled)
+        confirma_button = st.form_submit_button("CONFIRMAR PEDIDO",type="primary") #, disabled=not st.session_state.disabled)
                                 
 
         if confirma_button:
-            if input_email == '':
-                st.warning("Informe o E-mail!", icon="⚠️")
-                st.stop()
-
-            if not(re.search(regex,input_email)):  
-                st.warning("E-mail incorreto", icon="⚠️")   
-                st.stop()
-
             if input_nome == '':
-                st.warning("Informe o primeiro Nome!", icon="⚠️")
-                st.stop()
-
-            if input_sobrenome == '':
-                st.warning("Informe o primeiro Nome!", icon="⚠️")
-                st.stop()
-
-            if input_dn == '':
-                st.warning("Informe sua Data de Nascimento!", icon="⚠️")
+                st.warning("Informe seu Nome!", icon="⚠️")
                 st.stop()
 
             if input_telefone == '':
                 st.warning("Informe o número do Celular!", icon="⚠️")
-                st.stop()
-
-            if input_quemapoia == '':
-                st.warning("Informe o atleta ou equipe a qual está apoiando!", icon="⚠️")
                 st.stop()
 
             ncelular = input_telefone
@@ -231,54 +136,43 @@ def inscricao():
                 st.warning("Nº do celular inválido")
                 st.stop()
 
-            if input_rua == '':
-                st.warning("Informe a Rua!", icon="⚠️")
-                st.stop()
+            if input_re == 'Entrega':
+                if input_rua == '':
+                    st.warning("Informe a Rua!", icon="⚠️")
+                    st.stop()
 
-            if input_bairro == '':
-                st.warning("Informe o Bairro!", icon="⚠️")
-                st.stop()
+                if input_numero == '':
+                    st.warning("Informe o Número de endereço!", icon="⚠️")
+                    st.stop()
 
-            if input_cidade == '':
-                st.warning("Informe a Cidade e Estado (UF)!", icon="⚠️")
-                st.stop()
+                if input_bairro == '':
+                    st.warning("Informe o Bairro!", icon="⚠️")
+                    st.stop()
 
-            if resultado_email is not None:
-                st.warning("E-mail Já cadastrado!", icon="⚠️")
-                st.stop()
-
-            if not check_resp:
-                st.warning("Necessário aceitar o Termo de Responsabilidade!", icon="⚠️")
-                st.stop()
-
-            if input_genero == 'Masculino':
-                sexo = "M"
+            if input_re == 'Entrega':
+                s_re = "E"
             else:
-                sexo = "F"
+                s_re = "R"
 
-            data = date.today()
-            dataf = data.strftime('%d/%m/%Y')
-            datanasc = input_dn.strftime('%d/%m/%Y')
-            idade = calculateAge(input_dn)
+            data_e_hora = datetime.now()
+            dtpedido = data_e_hora.strftime('%d/%m/%Y %H:%M')
             
-            v_nome = input_nome + ' ' + input_sobrenome
             v_ncelular = ncelular
-            v_email = input_email
-            v_quemapoia = input_quemapoia
 
             try:
 
-                qry_insert = f"""INSERT INTO 200k.APOIO (
-                                 ID_APOIO, EMAIL, NOME, ENDERECO, NR_ENDERECO, COMP_ENDERECO, CIDADE, ESTADO_UF, DT_NASCIMENTO, 
-                                 NR_CELULAR, SEXO, CAMISETA, QUEM_APOIA, ATIVO, DT_INSCRICAO, FL_TERMO)
+                qry_insert = f"""INSERT INTO 200k.FEIJOADA (
+                                 ID_PEDIDO, NOME, ENDERECO, NR_ENDERECO, COMP_ENDERECO, PONTO_REF, BAIRRO, NR_CELULAR, 
+                                 FL_RE, OBS, DATAHORA_PEDIDO)
                                  VALUES (
-                                        {idapoio},"{input_email}","{input_nome + ' ' + input_sobrenome}","{input_rua}","{input_numero}","{input_comp}","{input_cidade}",
-                                        "{input_estado}","{datanasc}","{ncelular}","{sexo}","{input_camiseta}","{v_quemapoia}",'Sim',"{dataf}",'S') """
+                                        {idpedido},"{input_nome}","{input_rua}","{input_numero}","{input_comp}","{input_pontoref}",
+                                        "{input_bairro}","{ncelular}","{s_re}","{input_obs}","{dtpedido}") """
 
                 cursor = conexao.cursor()
                 cursor.execute(qry_insert)
                 conexao.commit()
                 cursor.close()
+
 
             except mysql.connector.Error as error:
                 st.warning("Erro no Banco de Daods, tente novamente, se persistir contate o Administrador do Sistema! {}".format(error), icon="⚠️")
@@ -288,21 +182,31 @@ def inscricao():
                 if conexao.is_connected():
                     conexao.close()            
         
+
             tela_ativa = 2
 
             form_inscricao.empty()
 
+
 inscricao()
+
 
 if tela_ativa == 2:
 
-    st.success("INSCRIÇÃO REALIZADA COM SUCESSO", icon="😀")
+    st.success("PEDIDO REALIZADO COM SUCESSO", icon="😀")
     #st.warning("ATENÇÃO", icon="⚠️")
-    st.warning("Em caso de dúvidas e pra mais esclarecimento, entrar em contato atraves do número (69) 99925-9005, ou pelo link a baixo:")
-    st.warning("https://wa.me/5569999259005", icon="📱")
+    st.warning("Em caso de dúvidas e pra mais esclarecimento, entrar em contato atraves do número (69) 99291-0753, ou pelo link a baixo:")
+    st.warning("https://wa.me/5569992910753", icon="📱")
 
-    enviar_email(v_nome,v_ncelular,v_quemapoia,v_email)
+    pessoa = v_nome
+    numero = '55' + v_ncelular
+    texto = f"Nome: {pessoa}! {' Teste'}"
+    st.warning("https://web.whatsapp.com/send?phone={numero}&text={texto}", icon="📱")
+
+
+    #enviar_email(v_nome,v_ncelular,v_email)
 
 from PIL import Image
 img = Image.open('003.png')
 st.image(img)
+
