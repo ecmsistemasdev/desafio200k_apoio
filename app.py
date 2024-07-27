@@ -88,8 +88,11 @@ with placeholder.container():
     from PIL import Image
     img = Image.open('02.png')
     st.image(img)
-
     st.markdown("### Feijoada do Casório")
+    st.caption("Sábado, 10 de agosto de 2024")
+    st.caption("")
+    st.markdown("##### Obrigado por nos ajudar a realizar esse sonho!")
+    st.caption("")
     st.markdown("###### Taxa de entrega R$5,00")
     #st.markdown("###### Caso deseje retirar no local, marque a opção abaixo 👇")
 
@@ -161,9 +164,10 @@ def fmpedido():
 
         input_obs = st.text_input(label="Observações:", key="09")
         v_obs = input_obs
-
-        st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
         
+        if input_re1 == "Retirada":
+            st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
+
         buttom_confirma =  st.form_submit_button("CONFIRMAR PEDIDO", type="primary")  # not st.session_state.disabled)
 
     #confirma_button = st.button("CONFIRMAR PEDIDO", type="primary")  # , disabled=not st.session_state.disabled)
@@ -255,6 +259,7 @@ if tela_ativa == 2:
 
     s_valor = "Valor R$: "+str(vltotal)+",00";
     s_qtd = " - Quantidade: "+str(qtde)
+    
     st.success("PEDIDO REALIZADO COM SUCESSO", icon="😀")
     st.success(s_valor + s_qtd, icon="💲")
     st.success("PIX para pagamento: (69) 99291-0753", icon="📱")
@@ -262,14 +267,12 @@ if tela_ativa == 2:
     if RetEnt=="R":
         st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
 
-    st.warning("Em caso de dúvidas e pra mais esclarecimento, entrar em contato atraves do número (69) 99291-0753, ou pelo link a baixo:")
-    st.warning("https://wa.me/5569992910753", icon="📱")
-
+    st.success("Em caso de dúvidas e pra mais esclarecimento, entrar em contato atraves do número (69) 99291-0753, ou pelo link a baixo:")
+    st.success("https://wa.me/5569992910753", icon="📱")
     
     pessoa = v_nome
     #numero = '55' + v_ncelular
     #texto = f"Nome: {pessoa}! {' Teste'}"
-
 
     #enviar_email(v_nome,v_ncelular,v_email)
 
