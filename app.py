@@ -167,7 +167,9 @@ def fmpedido():
         
         if input_re1 == "Retirada":
             st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
-
+            st.page_link("https://www.google.com/maps/place/R.+Coimbra,+5023+-+Flodoaldo+Pontes+Pinto,+Porto+Velho+-+RO,+76820-556/@-8.74851,-63.8687943,17z/data=!3m1!4b1!4m5!3m4!1s0x92325caa5b627c6f:0x2a526fea2c60ceae!8m2!3d-8.7485153!4d-63.8662194?entry=ttu",
+                         label="Clique aqui pra ver a localização")
+            
         buttom_confirma =  st.form_submit_button("CONFIRMAR PEDIDO", type="primary")  # not st.session_state.disabled)
 
     #confirma_button = st.button("CONFIRMAR PEDIDO", type="primary")  # , disabled=not st.session_state.disabled)
@@ -266,9 +268,12 @@ if tela_ativa == 2:
     #st.warning("ATENÇÃO", icon="⚠️")
     if RetEnt=="R":
         st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
+        st.page_link("https://www.google.com/maps/place/R.+Coimbra,+5023+-+Flodoaldo+Pontes+Pinto,+Porto+Velho+-+RO,+76820-556/@-8.74851,-63.8687943,17z/data=!3m1!4b1!4m5!3m4!1s0x92325caa5b627c6f:0x2a526fea2c60ceae!8m2!3d-8.7485153!4d-63.8662194?entry=ttu",
+                     label="Clique aqui pra ver a localização")
 
     st.success("Em caso de dúvidas e pra mais esclarecimento, entrar em contato atraves do número (69) 99291-0753, ou pelo link a baixo:")
     st.success("https://wa.me/5569992910753", icon="📱")
+
     
     pessoa = v_nome
     #numero = '55' + v_ncelular
