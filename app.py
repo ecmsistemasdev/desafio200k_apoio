@@ -5,7 +5,7 @@ from datetime import datetime
 import smtplib
 import email.message
 import os
-import locale
+#import locale
 
 conexao = mysql.connector.connect(
     host='200k.mysql.uhserver.com',
@@ -64,11 +64,11 @@ def enviar_email(snome,sfone,semail):
     #finally:            
 
 
-def moeda(xvalor):
-    #Xvalor = 1768 
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    xvalor = locale.currency(xvalor, grouping=True, symbol=None)
-    return 'Valor R$: %s' % xvalor
+#def moeda(xvalor):
+#    #Xvalor = 1768 
+#    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+#    xvalor = locale.currency(xvalor, grouping=True, symbol=None)
+#    return 'Valor R$: %s' % xvalor
     # resultado: Valor: 1.768,00
 
 
@@ -253,7 +253,7 @@ fmpedido()
 
 if tela_ativa == 2:
 
-    s_valor = moeda(vltotal);
+    s_valor = "Valor R$: "+str(vltotal)+",00";
     s_qtd = " - Quantidade: "+str(qtde)
     st.success("PEDIDO REALIZADO COM SUCESSO", icon="😀")
     st.success(s_valor + s_qtd, icon="💲")
