@@ -264,7 +264,7 @@ if tela_ativa == 2:
     
     st.success("PEDIDO REALIZADO COM SUCESSO", icon="😀")
     st.success(s_valor + s_qtd, icon="💲")
-    st.success("PIX para pagamento: (69) 99291-0753", icon="📱")
+    st.success("PIX para pagamento: (69) 99291-0753  \n Nome: Lucas Nascimento Pereira - Banco: NuBank", icon="📱")
     #st.warning("ATENÇÃO", icon="⚠️")
     if RetEnt=="R":
         st.warning("Local para Retirada: Rua Coimbra, 5023 - Flodoaldo pontes Pinto", icon="📍")
